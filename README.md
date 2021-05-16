@@ -26,8 +26,9 @@
 - [Usage](#usage)
 - [WebApp Links](#webapp)
 - [Circuit Diagram](#circuit)
+- [Tests](#tests)
 - [Built Using](#built_using)
-- [Demo Videos](#videos)
+<!-- - [Demo Videos](#videos) -->
 
 ## About <a name = "about"></a>
 
@@ -118,6 +119,16 @@ Open the terminal and execute the following commands
 Connect the Buzzer, Push Button, Battery, Charging Module, StepUp converter as shown in the picture below.
 
 ![circuit diagram](Circuit/Circuit_bb.png)
+
+## Test <a name = "tests"></a>
+
+- Install MQTTLens which is a chrome extension from the link below
+- https://chrome.google.com/webstore/detail/mqttlens/hemojaaeigabkbcookmlgmdigohjobjm?hl=en
+- Now open MQTTLens, click on '+' button next to 'Connections' on top left corner
+- In connection name add 'HiveMQ', in hostname add 'broker.hivemq.com' and then scroll down and click 'CREATE CONNECTION'   button
+- Now in Subscribe section put 'smartbuzzer/b' and click 'SUBSCRIBE' button next to it.
+- Restart your NodeMCU by pressing RST button on your nodemcu
+- once done, you will see data comming from NodeMCU to MQTTLens and when you press the buzzer button, you will see the MQTTLens log will show 'Pressed_some unique number'
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
