@@ -23,8 +23,8 @@
 
 // Update these with values suitable for your network.
 
-const char* ssid = "3STechLabs";
-const char* password = "%@3stech@nauman%";
+const char* ssid = "WiFi Name";
+const char* password = "WiFi Password";
 const char* mqtt_server = "broker.hivemq.com";
 
 SoftwareStack ss;
