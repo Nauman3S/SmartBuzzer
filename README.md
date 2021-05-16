@@ -115,9 +115,9 @@ Open the terminal and execute the following commands
 - Admin Dashboard http://vend-admin.production.wrapdrive.tech/#/ -->
 
 ## Circuit Diagram <a name = "circuit"></a>
-<!-- Servo is connected to GPIO3 of Raspberry Pi
+Connect the Buzzer, Push Button, Battery, Charging Module, StepUp converter as shown in the picture below.
 
-![circuit diagram](Circuit_bb.png) -->
+![circuit diagram](Circuit/Circuit_bb.png)
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 
