@@ -1,12 +1,11 @@
 /*
- Basic ESP8266 MQTT example
- This sketch demonstrates the capabilities of the pubsub library in combination
- with the ESP8266 board/library.
+ Buzzer Firmware 
+
  It connects to an MQTT server then:
-  - publishes "hello world" to the topic "outTopic" every two seconds
-  - subscribes to the topic "inTopic", printing out any messages
+  - publishes "number_macAddress" to the topic "smartbuzzer/b" every two seconds
+  - subscribes to the topic "smartbuzzer/conf", printing out any messages
     it receives. NB - it assumes the received payloads are strings not binary
-  - If the first character of the topic "inTopic" is an 1, switch ON the ESP Led,
+  - If the first character of the topic "smartbuzzer/conf" is an 1, switch ON the ESP Led,
     else switch it off
  It will reconnect to the server if the connection is lost using a blocking
  reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
@@ -36,9 +35,15 @@ unsigned long lastMsg = 0;
 char msg[MSG_BUFFER_SIZE];
 int value = 0;
 String macAddress="";
+int pushButton=D6;
+int buzzerPin=D7;
+int buzzerPlay=0;
 void setup_wifi() {
 
   delay(10);
+  pinMode(pushButton,INPUT);
+  pinMode(buzzerPin,OUTPUT);
+  digitalWrite(buzzerPin,LOW)
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
@@ -112,21 +117,35 @@ void setup() {
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
 }
-
+String val="";
 void loop() {
 
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
-
+  if(digitalRead(pushButton)==0){
+    val=String("Pressed")+String("_")+macAddress;
+    client.publish("smartbuzzer/b", val.c_str());    
+    digitalWrite(buzzerPin, 1);
+    buzzerPlay=1;
+  }
   unsigned long now = millis();
   if (now - lastMsg > 2000) {
+    if(buzzerPlay==1){
+      buzzerPlay=2;
+    }
+    else if(buzzerPlay==2){
+      buzzerPlay=0;
+      digitalWrite(buzzerPin, 0);//stop the buzzer
+    }
+    
     lastMsg = now;
     ++value;
-    snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
+    val=String(value)+String("_")+macAddress;
+    //snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
     Serial.print("Publish message: ");
-    Serial.println(msg);
-    client.publish("smartbuzzer/b", msg);
+    Serial.println(val);
+    client.publish("smartbuzzer/b", val.c_str());
   }
 }
