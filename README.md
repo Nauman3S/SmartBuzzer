@@ -157,7 +157,6 @@ Connect the Buzzer, Push Button, Battery, Charging Module, StepUp converter as s
 - [Arduino](https://www.arduino.cc) - Arduino IDE
 - [NodeRED](https://nodered.org/) - NodeRED
 
-<!-- ## Demo Videos <a name = "videos"></a>
+## Demo Videos <a name = "videos"></a>
 
-- Detailed Demo and instructions video: https://youtu.be/2oo2hGzqNCo
-- Raspberry Pi connected to a dedicated HDMI screen: https://youtu.be/h_4XLJeSDq4 -->
+- System Demo video: https://youtu.be/qseJCq_fw7s
