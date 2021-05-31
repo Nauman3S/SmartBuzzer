@@ -2,10 +2,10 @@
  Buzzer Firmware 
 
  It connects to an MQTT server then:
-  - publishes "number_macAddress" to the topic "smartbuzzer/b" every two seconds
-  - subscribes to the topic "smartbuzzer/conf", printing out any messages
+  - publishes "number_macAddress" to the topic "SmartBuzzer/b" every two seconds
+  - subscribes to the topic "SmartBuzzer/config", printing out any messages
     it receives. NB - it assumes the received payloads are strings not binary
-  - If the first character of the topic "smartbuzzer/conf" is an 1, switch ON the ESP Led,
+  - If the first character of the topic "SmartBuzzer/conf" is an 1, switch ON the ESP Led,
     else switch it off
  It will reconnect to the server if the connection is lost using a blocking
  reconnect function. See the 'mqtt_reconnect_nonblocking' example for how to
@@ -26,6 +26,7 @@
 const char* ssid = "WiFi Name";
 const char* password = "WiFi Password";
 const char* mqtt_server = "broker.hivemq.com";
+String buttonID="b1";
 
 SoftwareStack ss;
 WiFiClient espClient;
@@ -38,12 +39,13 @@ String macAddress="";
 int pushButton=D6;
 int buzzerPin=D7;
 int buzzerPlay=0;
+int btnCount=0;
 void setup_wifi() {
 
   delay(10);
   pinMode(pushButton,INPUT);
   pinMode(buzzerPin,OUTPUT);
-  digitalWrite(buzzerPin,LOW)
+  digitalWrite(buzzerPin,LOW);
   // We start by connecting to a WiFi network
   Serial.println();
   Serial.print("Connecting to ");
@@ -70,8 +72,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Message arrived [");
   Serial.print(topic);
   Serial.print("] ");
+  String pl="";
   for (int i = 0; i < length; i++) {
     Serial.print((char)payload[i]);
+    pl=pl+String(payload[i]);
   }
   Serial.println();
 
@@ -82,6 +86,11 @@ void callback(char* topic, byte* payload, unsigned int length) {
     // it is active low on the ESP-01)
   } else {
     digitalWrite(BUILTIN_LED, HIGH);  // Turn the LED off by making the voltage HIGH
+  }
+   if(String(topic)==String("SmartBuzzer/config")){
+    if(String(pl)==String("reset")){
+      btnCount=0;
+    }
   }
 
 }
@@ -99,7 +108,7 @@ void reconnect() {
       // Once connected, publish an announcement...
       client.publish("outTopic", "hello world");
       // ... and resubscribe
-      client.subscribe("smartbuzzer/conf");
+      client.subscribe("SmartBuzzer/config");
     } else {
       Serial.print("failed, rc=");
       Serial.print(client.state());
@@ -118,6 +127,8 @@ void setup() {
   client.setCallback(callback);
 }
 String val="";
+String topicName="SmartBuzzer/device/"+buttonID;
+
 void loop() {
 
   if (!client.connected()) {
@@ -125,8 +136,9 @@ void loop() {
   }
   client.loop();
   if(digitalRead(pushButton)==0){
-    val=String("Pressed")+String("_")+macAddress;
-    client.publish("smartbuzzer/b", val.c_str());    
+    btnCount++;
+    val=String(btnCount);
+    client.publish(topicName.c_str(), val.c_str());    
     digitalWrite(buzzerPin, 1);
     buzzerPlay=1;
   }
@@ -142,10 +154,10 @@ void loop() {
     
     lastMsg = now;
     ++value;
-    val=String(value)+String("_")+macAddress;
-    //snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
-    Serial.print("Publish message: ");
-    Serial.println(val);
-    client.publish("smartbuzzer/b", val.c_str());
+    // val=String(value)+String("_")+macAddress;
+    // //snprintf (msg, MSG_BUFFER_SIZE, "hello world #%ld", value);
+    // Serial.print("Publish message: ");
+    // Serial.println(val);
+    // client.publish(topicName.c_str(), val.c_str());
   }
 }

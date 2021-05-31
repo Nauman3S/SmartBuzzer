@@ -94,36 +94,47 @@ Open the terminal and execute the following commands
 - sudo chmod a+rx starter.sh
 - sudo apt install ufw
 - sudo ufw enable
-- sudo ufw allow tcp http https 1883 8883
+- sudo ufw allow tcp http https 1883 8883 1880
 ```
 ##### Installing MQTT(Mosquitto)
+Open the terminal and execute the following commands
 
 ```
 - sudo apt install -y mosquitto mosquitto-clients
 - sudo systemctl enable mosquitto.service
 - mosquitto -v
 ```
+##### Installing and Configuring NodeRED
+Open the terminal and execute the following commands
+
+```
+- bash <(curl -sL https://raw.githubusercontent.com/node-red/linux-installers/master/deb/update-nodejs-and-nodered)
+- sudo systemctl enable nodered.service
+- npm install node-red-dashboard 
+- sudo npm install node-red-dashboard
+- sudo systemctl restart nodered.service
+```
+Then open NodeRED in your raspberry pi or using any other device which is connected to the same network
+as your Raspberry Pi is.
+In the browser you can type http://raspberrypi.local:1880 to open the node-red
+
+- Once node-red is opened, click on the menu button on the top left corner of the app and click on import.
+- Click on `select file to import` and select flows.json present in the Flows directory of this repo.
+- After flows are imported, click on Deploy button on the top of the screen to save the changes.
+- You can access the Dashboard using http://raspberrypi.local:1880/ui
+
 
 ## Usage <a name = "usage"></a>
 
 #### Raspberry Pi
 
-- Running the Raspberry Pi Firmware
+- Just turn on the raspberry pi and navigate to the dashboard URL using any device
 
-Open the terminal and execute the following commands
-
-```
-- cd ~/Desktop/RaspDisplay
-- ./starter.sh
-```
 
 ## WebApp Links <a name = "webapp"></a>
 
-#### (Skip this; not required yet)
 
-<!-- - Client App Machine 1 http://vend-frontend.production.wrapdrive.tech/#/dashboard/1
-- Client App Machine 2 http://vend-frontend.production.wrapdrive.tech/#/dashboard/2
-- Admin Dashboard http://vend-admin.production.wrapdrive.tech/#/ -->
+- Dashboard http://raspberrypi.local:1880/ui
 
 ## Circuit Diagram <a name = "circuit"></a>
 Connect the Buzzer, Push Button, Battery, Charging Module, StepUp converter as shown in the picture below.
@@ -144,6 +155,7 @@ Connect the Buzzer, Push Button, Battery, Charging Module, StepUp converter as s
 
 - [Python](https://www.python.org/) - Programming Language
 - [Arduino](https://www.arduino.cc) - Arduino IDE
+- [NodeRED](https://nodered.org/) - NodeRED
 
 <!-- ## Demo Videos <a name = "videos"></a>
 
