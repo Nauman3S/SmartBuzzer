@@ -80,23 +80,33 @@ const char* password = "WiFi Password";
 - From Sketch Menu click on Upload to upload the code
 
 
-#### Raspberry Pi(Skip this; not required yet)
+#### Raspberry Pi
 
-Installing the Firmware to your Raspberry Pi(required only one time)
+Conifguring NodeRED, MQTT and Firmware(required only one time)
 - Copy Fimrware folder to the Desktop of Raspberry Pi
 
 Open the terminal and execute the following commands
 
 ```
-- cd ~/Desktop/Firmware/RaspDisplay
+- sudo apt update
+- sudo apt upgrade
+- cd ~/Desktop/Firmware/
 - sudo chmod a+rx starter.sh
-- sudo chmod a+rx updater.sh
+- sudo apt install ufw
+- sudo ufw enable
+- sudo ufw allow tcp http https 1883 8883
 ```
+##### Installing MQTT(Mosquitto)
 
+```
+- sudo apt install -y mosquitto mosquitto-clients
+- sudo systemctl enable mosquitto.service
+- mosquitto -v
+```
 
 ## Usage <a name = "usage"></a>
 
-#### Raspberry Pi(Skip this; not required yet)
+#### Raspberry Pi
 
 - Running the Raspberry Pi Firmware
 
